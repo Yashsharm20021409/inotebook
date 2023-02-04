@@ -7,6 +7,8 @@ var jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'ThisIsOurTo$ken'
 
+//IMP:- get req eslye use ni ki kuki use hm mostly data send krne k lie use krte h due to this data(password,email,username) will be shown in address
+
 // Create a User Using:POST "/api/auth/createuser" post req marni h or data bhj skte h (not for Login)
 router.post('/createuser', [
 
@@ -30,9 +32,9 @@ router.post('/createuser', [
         if (user) {
             return res.status(400).json({ error: 'This Email Already Exits' })
         }
-        
+
         const salt = await bcrypt.genSalt(10);
-        const secPass = await bcrypt.hash(req.body.password,salt)
+        const secPass = await bcrypt.hash(req.body.password, salt)
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
@@ -40,21 +42,65 @@ router.post('/createuser', [
         })
 
         const data = {
-            user:{
-                id:user.id
+            user: {
+                id: user.id
             }
         }
-        var authToken = jwt.sign(data,JWT_SECRET);
+        var authToken = jwt.sign(data, JWT_SECRET);
         // console.log(authToken)
 
         // .then(user => res.json(user)).catch(err=>{console.log("User already Exits")
         // res.json({error:'Please Try With Another Email',message:err.message})})
         // res.json({ created: 'Account Has Been Created successfully',user })
-        res.json({authToken})
+        res.json({ authToken })
     } catch (error) {
         // About ideally we not doing this console.log
         console.error(error.message)
+        res.status(500).send("Internal Server Error");
     }
+})
+
+
+
+// Authentication a User using JWT: POST "/api/auth/login"
+router.post('/login', [
+    body('email', 'Enter a Valid Email').isEmail(),
+    body('password', 'cannot be blanked').exists(),
+], async (req, res) => {
+
+    // check if error occurs and then errors and bad request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {email,password} = req.body;
+    try{
+        let user = await User.findOne({email})
+        if(!user){
+            return res.status(400).json({error:'Please try to Login with correct Credentials'});
+        }
+
+        //it takes the passWord(string) provided by user and the hash Password avialble in DATABASE(hash)
+        const passwordCompare = await bcrypt.compare(password,user.password);
+        if(!passwordCompare){
+            return res.status(400).json({error:'Please try to Login with correct Credentials'});
+        }
+
+        // agar passWord Match hogya then we send the data of the user
+        const data = {
+            user: {
+                id: user.id
+            }
+        }
+        var authToken = jwt.sign(data, JWT_SECRET);
+        res.json({authToken});
+    }catch(error){
+        // About ideally we not doing this console.log
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+
 })
 
 module.exports = router;
