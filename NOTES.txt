@@ -1,0 +1,2 @@
+// concuurently NPM :- to run multiple server concuurently (more on website of this nodePackage)
+add "both":"concurrently \"npm run start\" \"nodemon backend/index.js\"" in pck.json
