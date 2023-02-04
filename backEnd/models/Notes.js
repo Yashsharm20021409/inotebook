@@ -1,6 +1,12 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
 const NotesSchema = new Schema({
+    // user eslye dala ki sb user apna apna data dhke (mtlb link krne k lie dono user or notes ko)
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
+    },
     title:{
         type:String,
         required:true
@@ -21,4 +27,4 @@ const NotesSchema = new Schema({
 });
   
 
-module.exports = mongoose.model('notes',NotesSchema);
+module.exports = mongoose.model('Notes',NotesSchema);

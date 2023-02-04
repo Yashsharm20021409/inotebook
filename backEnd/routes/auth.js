@@ -4,6 +4,8 @@ const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+const { findOne } = require('../models/User');
+const fetchUser = require('../middleware/fetchUser')
 
 const JWT_SECRET = 'ThisIsOurTo$ken'
 
@@ -62,7 +64,7 @@ router.post('/createuser', [
 
 
 
-// Authentication a User using JWT: POST "/api/auth/login"
+//Route 2: Authentication a User using JWT: POST "/api/auth/login" No login req
 router.post('/login', [
     body('email', 'Enter a Valid Email').isEmail(),
     body('password', 'cannot be blanked').exists(),
@@ -74,17 +76,17 @@ router.post('/login', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const {email,password} = req.body;
-    try{
-        let user = await User.findOne({email})
-        if(!user){
-            return res.status(400).json({error:'Please try to Login with correct Credentials'});
+    const { email, password } = req.body;
+    try {
+        let user = await User.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ error: 'Please try to Login with correct Credentials' });
         }
 
         //it takes the passWord(string) provided by user and the hash Password avialble in DATABASE(hash)
-        const passwordCompare = await bcrypt.compare(password,user.password);
-        if(!passwordCompare){
-            return res.status(400).json({error:'Please try to Login with correct Credentials'});
+        const passwordCompare = await bcrypt.compare(password, user.password);
+        if (!passwordCompare) {
+            return res.status(400).json({ error: 'Please try to Login with correct Credentials' });
         }
 
         // agar passWord Match hogya then we send the data of the user
@@ -94,13 +96,27 @@ router.post('/login', [
             }
         }
         var authToken = jwt.sign(data, JWT_SECRET);
-        res.json({authToken});
-    }catch(error){
+        res.json({ authToken });
+    } catch (error) {
         // About ideally we not doing this console.log
         console.error(error.message);
         res.status(500).send("Internal Server Error");
     }
 
+})
+
+// Route 3: Get Logged in User Details using: POST "api/auth/getuser" Login required
+router.post('/getuser',fetchUser, async (req, res) => {
+
+    try {
+        const userID = req.user.id
+        let user = await User.findOne({ userID }).select('-password');
+        res.send(user)
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error"); 
+    }
 })
 
 module.exports = router;
