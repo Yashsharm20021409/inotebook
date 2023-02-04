@@ -1,2 +1,32 @@
 // concuurently NPM :- to run multiple server concuurently (more on website of this nodePackage)
 add "both":"concurrently \"npm run start\" \"nodemon backend/index.js\"" in pck.json
+
+/**************************************/
+INTRO TO REACT CONTEXT API
+
+React app contains two main things 
+1.state
+2.components
+
+Basically need of context api is that
+let suppose we have a structure like 
+
+                app.js
+                  |
+            ______|_________
+            |   |     |    |  
+            c1  c2    c3   c4
+                |          |
+                c5        c7(let color red chye)
+                |
+                c6(let color:red chye)
+
+To full fill nedd of all this first we have to create the state in app.js then we pass (props to c2->c3->c4 after that we will able to use it)
+These is very hectic task and in complex applications like(amazon it will become more hectic)
+
+to avoid this we create a context api though which we do all these task 
+and all the variable is use a hook called (useContext(value))
+
+just check (video no 58 if you forget syntax how to use)
+
+ /*************************************/
