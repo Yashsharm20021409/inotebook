@@ -2,6 +2,10 @@ const express = require('express')
 const router = express.Router();
 const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+
+const JWT_SECRET = 'ThisIsOurTo$ken'
 
 // Create a User Using:POST "/api/auth/createuser" post req marni h or data bhj skte h (not for Login)
 router.post('/createuser', [
@@ -26,15 +30,27 @@ router.post('/createuser', [
         if (user) {
             return res.status(400).json({ error: 'This Email Already Exits' })
         }
+        
+        const salt = await bcrypt.genSalt(10);
+        const secPass = await bcrypt.hash(req.body.password,salt)
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password
+            password: secPass
         })
+
+        const data = {
+            user:{
+                id:user.id
+            }
+        }
+        var authToken = jwt.sign(data,JWT_SECRET);
+        // console.log(authToken)
 
         // .then(user => res.json(user)).catch(err=>{console.log("User already Exits")
         // res.json({error:'Please Try With Another Email',message:err.message})})
-        res.json({ created: 'Account Has Been Created successfully',user })
+        // res.json({ created: 'Account Has Been Created successfully',user })
+        res.json({authToken})
     } catch (error) {
         // About ideally we not doing this console.log
         console.error(error.message)

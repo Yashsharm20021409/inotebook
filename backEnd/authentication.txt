@@ -1,0 +1,11 @@
+// how hash salt pepper work on pass
+// intro: 
+
+
+
+
+
+
+// when user is try to login through email ans password but password is converted to hash which is not converted back into password which is entered by the user 
+// so will provide one token to the user for excess there account (there are sevral methods to do so which is tell in video)
+// from one of them we will use the (JWT jasonWebToken)
