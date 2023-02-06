@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
 import NoteState from './context/notes/NoteState';
+import Alert from './components/Alert';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         {/* <h1>This is inotebook</h1> */}
         <Router>
           <Navbar />
+          <Alert message = "Success: Done"/>
           <div className="container">
             <Routes>
               <Route path='/' element={<Home />}></Route>
