@@ -30,3 +30,9 @@ and all the variable is use a hook called (useContext(value))
 just check (video no 58 if you forget syntax how to use)
 
  /*************************************/
+
+// How to fetch the api using headers
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+//require cors to fetch data from different host
+in index.js of backend we implement this
