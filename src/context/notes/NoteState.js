@@ -63,13 +63,16 @@ const NoteState = (props) => {
         setNotes(notes.concat(note))
       }
 
-      //   DELETE a Note
-      const deleteNote = () =>{
-
+      //   DELETE a Note (id is props here)
+      const deleteNote = (id) =>{
+        console.log("Deleting the node with id "+id);
+        // agar notes._id not equal h id k(id of that ele which we want to delete) to vo notes me rhega otherwise ni rhega
+        const newNotes = notes.filter((note)=>{return note._id !== id})
+        setNotes(newNotes);
       }
 
       //   EDIT a Note
-      const editNote = () =>{
+      const editNote = (id,title,description,tag) =>{
 
       }
 

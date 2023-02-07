@@ -6,7 +6,7 @@ import NoteItem from './NoteItem';
 const Notes = () => {
     const context = useContext(noteContext);
     // destructring
-    const { notes, addNote } = context;
+    const { notes} = context;
 
     // setNotes({
 
