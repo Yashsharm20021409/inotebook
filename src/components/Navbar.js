@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link,useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 
 const Navbar = () => {
     let location = useLocation();
-    useEffect(()=>{
+    useEffect(() => {
         // console.log(location.pathname);
-    },[location])
+    }, [location])
 
     return (
         <div>
@@ -19,15 +19,15 @@ const Navbar = () => {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link className={`nav-link ${useLocation === '/'?"active":""}`} aria-current="page" to="/">Home</Link>
+                                <Link className={`nav-link ${useLocation === '/' ? "active" : ""}`} aria-current="page" to="/">Home</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className={`nav-link ${useLocation === '/about'?"active":""}`} to="/about">About</Link>
+                                <Link className={`nav-link ${useLocation === '/about' ? "active" : ""}`} to="/about">About</Link>
                             </li>
                         </ul>
-                        <form className="d-flex" role="search">
-                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success" type="submit">Search</button>
+                        <form className="d-flex" >
+                            <Link class="btn btn-primary mx-2" to='/login' role="button">Login</Link>
+                            <Link class="btn btn-primary " to='/signup' role="button">Signup</Link>
                         </form>
                     </div>
                 </div>
