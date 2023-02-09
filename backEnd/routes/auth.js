@@ -20,19 +20,20 @@ router.post('/createuser', [
     // password must be at least 5 chars long
     body('password', 'PassWord Must Be more then 5 Charcters').isLength({ min: 5 })
 ], async (req, res) => {
+    let success =false;
+
     try {
-
-
         // check if error occurs and then errors and bad request
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({success, errors: errors.array() });
         }
 
         // to check if user with this email exists already
         let user = await User.findOne({ email: req.body.email })
         if (user) {
-            return res.status(400).json({ error: 'This Email Already Exits' })
+
+            return res.status(400).json({success, error: 'This Email Already Exits' })
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -54,7 +55,8 @@ router.post('/createuser', [
         // .then(user => res.json(user)).catch(err=>{console.log("User already Exits")
         // res.json({error:'Please Try With Another Email',message:err.message})})
         // res.json({ created: 'Account Has Been Created successfully',user })
-        res.json({ authToken })
+        success = true;
+        res.json({ success,authToken })
     } catch (error) {
         // About ideally we not doing this console.log
         console.error(error.message)
@@ -77,16 +79,19 @@ router.post('/login', [
     }
 
     const { email, password } = req.body;
+    
+    let success = false;
     try {
         let user = await User.findOne({ email })
         if (!user) {
-            return res.status(400).json({ error: 'Please try to Login with correct Credentials' });
+            return res.status(400).json({success, error: 'Please try to Login with correct Credentials' });
         }
 
         //it takes the passWord(string) provided by user and the hash Password avialble in DATABASE(hash)
         const passwordCompare = await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
-            return res.status(400).json({ error: 'Please try to Login with correct Credentials' });
+            // success = false;
+            return res.status(400).json({success, error: 'Please try to Login with correct Credentials' });
         }
 
         // agar passWord Match hogya then we send the data of the user
@@ -96,7 +101,8 @@ router.post('/login', [
             }
         }
         var authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
+        success = true;
+        res.json({success, authToken });
     } catch (error) {
         // About ideally we not doing this console.log
         console.error(error.message);
