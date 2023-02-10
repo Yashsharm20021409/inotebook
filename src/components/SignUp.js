@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const SignUp = (props) => {
 
 
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "" });
@@ -22,10 +22,11 @@ const SignUp = () => {
     const json = await response.json()
     console.log(json);
     if (json.success) {
-      localStorage.setItem('token', json.authtoken);
+      localStorage.setItem('token', json.authToken);
       navigate("/");
+      props.showAlert("Account Created Successfully","success")
     } else {
-      alert("Invalid ")
+      props.showAlert('This Email Already Exists','danger')
     }
   }
 
@@ -33,7 +34,8 @@ const SignUp = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value })
   }
   return (
-    <div>
+    <div className='mt-3'>
+      <h2 className='mb-3'>Signup an Account to use iNoteBook</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Enter Your Name</label>

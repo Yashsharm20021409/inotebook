@@ -18,7 +18,7 @@ const NoteState = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNkZTFiM2Y1M2RlMjk2OTU3OWUwOTgzIn0sImlhdCI6MTY3NTUwOTU2NH0.JqdEueUuUNt5d8-wkWJHur7OYdvv-sWkfvx_RTQMsw0'
+        'auth-token': localStorage.getItem('token')
       },
     });
     const json = await response.json();
@@ -34,7 +34,7 @@ const NoteState = (props) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNkZTFiM2Y1M2RlMjk2OTU3OWUwOTgzIn0sImlhdCI6MTY3NTUwOTU2NH0.JqdEueUuUNt5d8-wkWJHur7OYdvv-sWkfvx_RTQMsw0'
+        'auth-token': localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
@@ -51,11 +51,11 @@ const NoteState = (props) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNkZTFiM2Y1M2RlMjk2OTU3OWUwOTgzIn0sImlhdCI6MTY3NTUwOTU2NH0.JqdEueUuUNt5d8-wkWJHur7OYdvv-sWkfvx_RTQMsw0'
+        'auth-token': localStorage.getItem('token')
       },
       
     });
-    const json = await response.json();
+    // const json = await response.json();
     // console.log("Deleting the node with id " + id);
     // console.log(json);
     // agar notes._id not equal h id k(id of that ele which we want to delete) to vo notes me rhega otherwise ni rhega
@@ -70,11 +70,11 @@ const NoteState = (props) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNkZTFiM2Y1M2RlMjk2OTU3OWUwOTgzIn0sImlhdCI6MTY3NTUwOTU2NH0.JqdEueUuUNt5d8-wkWJHur7OYdvv-sWkfvx_RTQMsw0'
+        'auth-token': localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
-    const json = await response.json();
+    // const json = await response.json();
     // console.log(json);
 
 

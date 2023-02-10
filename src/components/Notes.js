@@ -2,27 +2,34 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import noteContext from '../context/notes/noteContext'
 import AddNote from './AddNote';
 import NoteItem from './NoteItem';
+import { useNavigate } from 'react-router-dom'
+// import Alert from './Alert';
 
-const Notes = () => {
+const Notes = (props) => {
     const context = useContext(noteContext);
     // destructring
     const { notes, getAllNotes, editNote } = context;
     const ref = useRef(null)
     const closeRef = useRef(null)
     const [note, setNotes] = useState({ id: "", etitle: "", edescription: "", etag: "" })
+    let navigate = useNavigate();
 
     // setNotes({
 
     // })
     useEffect(() => {
-        getAllNotes()
+        if(localStorage.getItem('token')){
+            getAllNotes()
+        }else{
+            navigate("/login");
+        }
         // eslint-disable-next-line
     }, [])
 
     const updateNotes = (currentNotes) => {
         ref.current.click();
         setNotes({ id: currentNotes._id, etitle: currentNotes.title, edescription: currentNotes.description, etag: currentNotes.tag })
-
+        
     }
 
     // to refenece any ele
@@ -33,6 +40,7 @@ const Notes = () => {
         // console.log("updated",note)
         closeRef.current.click();
         editNote(note.id, note.etitle, note.edescription, note.etag)
+        props.showAlert("Note Updated Successfully","success")
     }
 
     const onChange = (e) => {
@@ -40,7 +48,7 @@ const Notes = () => {
     }
     return (
         <>
-            <AddNote />
+            <AddNote  showAlert = {props.showAlert}/>
 
             <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
@@ -87,7 +95,7 @@ const Notes = () => {
                 </div>
                 {
                     notes.map((note) => {
-                        return <NoteItem key={note._id} updateNotes={updateNotes} note={note} />
+                        return <NoteItem key={note._id} updateNotes={updateNotes} note={note} showAlert = {props.showAlert}/>
                     })
                 }
             </div>
